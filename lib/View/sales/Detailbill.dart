@@ -448,7 +448,10 @@ class _DetailpbillState extends State<Detailpbill> {
                             ),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: ()  async {
+                          await provider.printBill();
+                        },
+
                         icon: Icon(
                           Icons.print,
                         ),

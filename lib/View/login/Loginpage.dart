@@ -46,7 +46,7 @@ class _LogState extends State<Log> {
                   ),
                 ),
                 Text(
-                  "Welcome Back",
+                  "Welcome Back !",
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,

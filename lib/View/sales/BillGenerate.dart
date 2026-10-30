@@ -375,7 +375,9 @@ class _BillState extends State<Bill> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: ()async {
+                        await provider.printBill();
+                        },
                                 style: ButtonStyle(
                                   foregroundColor: WidgetStatePropertyAll(
                                     Colors.white,

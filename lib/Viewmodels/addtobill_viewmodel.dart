@@ -15,6 +15,7 @@ class AddtobillViewmodel extends ChangeNotifier {
   String searchText = "";
 
   bool loading = false;
+  bool generatingBill = false;
 
   List<QueryDocumentSnapshot> allProducts = [];
   List<QueryDocumentSnapshot> filteredProducts = [];
@@ -25,6 +26,7 @@ class AddtobillViewmodel extends ChangeNotifier {
     getProducts();
   }
 
+  // GET PRODUCTS
   Future<void> getProducts() async {
     try {
       loading = true;
@@ -42,27 +44,32 @@ class AddtobillViewmodel extends ChangeNotifier {
     }
   }
 
+  // SEARCH PRODUCT
   void searchProduct(String value) {
     searchText = value;
 
-    filteredProducts = allProducts.where((doc) {
-      String productName =
-      doc['pname'].toString().toLowerCase();
+    filteredProducts = allProducts.where(
+          (doc) {
+        String productName =
+        doc['pname'].toString().toLowerCase();
 
-      return productName.contains(
-        searchText.toLowerCase(),
-      );
-    }).toList();
+        return productName.contains(
+          searchText.toLowerCase(),
+        );
+      },
+    ).toList();
 
     notifyListeners();
   }
 
+  // CHANGE CUSTOMER
   void changeCustomer(String value) {
     selectedcustomer = value;
 
     notifyListeners();
   }
 
+  // ADD PRODUCT TO CART
   void addtocart(
       String id,
       String name,
@@ -83,19 +90,22 @@ class AddtobillViewmodel extends ChangeNotifier {
 
       cart[index]['qty'] = qty + 1;
     } else {
-      cart.add({
-        'id': id,
-        'name': name,
-        'price': price,
-        'unit': unit,
-        'qty': 1,
-        'mrp': mrp,
-      });
+      cart.add(
+        {
+          'id': id,
+          'name': name,
+          'price': price,
+          'unit': unit,
+          'qty': 1,
+          'mrp': mrp,
+        },
+      );
     }
 
     notifyListeners();
   }
 
+  // INCREASE QUANTITY
   void increseqty(int index) {
     int qty =
         int.tryParse(
@@ -108,6 +118,7 @@ class AddtobillViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // DECREASE QUANTITY
   void decreseqty(int index) {
     int qty =
         int.tryParse(
@@ -122,18 +133,21 @@ class AddtobillViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // DELETE ONE ITEM
   void itemdelete(int index) {
     cart.removeAt(index);
 
     notifyListeners();
   }
 
+  // CLEAR CART
   void clearcart() {
     cart.clear();
 
     notifyListeners();
   }
 
+  // TOTAL AMOUNT
   double get totalAmount {
     double total = 0;
 
@@ -156,6 +170,7 @@ class AddtobillViewmodel extends ChangeNotifier {
     return total;
   }
 
+  // GET BILL NUMBER
   Future<String> getBillNumber() async {
     var reference =
     billCounter.doc('bill');
@@ -179,18 +194,47 @@ class AddtobillViewmodel extends ChangeNotifier {
 
       number = lastNumber + 1;
 
-      await reference.update({
-        'lastNumber': number,
-      });
+      await reference.update(
+        {
+          'lastNumber': number,
+        },
+      );
     } else {
-      await reference.set({
-        'lastNumber': number,
-      });
+      await reference.set(
+        {
+          'lastNumber': number,
+        },
+      );
     }
 
     return "RP-$number";
   }
 
+  // GENERATE BILL
+  Future<String?> generateBill() async {
+    if (cart.isEmpty) {
+      return null;
+    }
+
+    try {
+      generatingBill = true;
+      notifyListeners();
+
+      String billNo =
+      await getBillNumber();
+
+      return billNo;
+    } catch (e) {
+      print(
+        "Generate bill error: $e",
+      );
+
+      return null;
+    } finally {
+      generatingBill = false;
+      notifyListeners();
+    }
+  }
   void newBill() {
     cart.clear();
 
@@ -204,7 +248,9 @@ class AddtobillViewmodel extends ChangeNotifier {
     "walk in customer";
 
     filteredProducts =
-        List.from(allProducts);
+        List.from(
+          allProducts,
+        );
 
     notifyListeners();
   }
