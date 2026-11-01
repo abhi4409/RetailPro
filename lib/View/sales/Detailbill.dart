@@ -11,21 +11,23 @@ class Detailpbill extends StatefulWidget {
   });
 
   @override
-  State<Detailpbill> createState() => _DetailpbillState();
+  State<Detailpbill> createState() =>
+      _DetailpbillState();
 }
 
-class _DetailpbillState extends State<Detailpbill> {
+class _DetailpbillState
+    extends State<Detailpbill> {
   @override
   Widget build(
       BuildContext context,
       ) {
     return ChangeNotifierProvider(
-      create: (
-          context,
-          ) => DetailbillViewmodel(
-        snap: widget.snap,
-      ),
-      child: Consumer<DetailbillViewmodel>(
+      create: (context) =>
+          DetailbillViewmodel(
+            snap: widget.snap,
+          ),
+      child:
+      Consumer<DetailbillViewmodel>(
         builder: (
             context,
             provider,
@@ -33,15 +35,18 @@ class _DetailpbillState extends State<Detailpbill> {
             ) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
+              backgroundColor:
+              Colors.blue,
+              foregroundColor:
+              Colors.white,
               title: Text(
-                'Bill Details',
+                "Bill Details",
               ),
             ),
             body: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(
+                padding:
+                EdgeInsets.symmetric(
                   horizontal: 20,
                 ),
                 child: Column(
@@ -51,8 +56,10 @@ class _DetailpbillState extends State<Detailpbill> {
                     ),
                     Card(
                       elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
+                      shape:
+                      RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(
                           20,
                         ),
                       ),
@@ -64,21 +71,30 @@ class _DetailpbillState extends State<Detailpbill> {
                           ListTile(
                             title: Text(
                               "Bill No: ${provider.billNo}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                              style:
+                              TextStyle(
+                                fontWeight:
+                                FontWeight.bold,
                                 fontSize: 18,
                               ),
                             ),
-                            leading: CircleAvatar(
+                            leading:
+                            CircleAvatar(
                               radius: 20,
-                              backgroundColor: Colors.blue.shade100,
+                              backgroundColor:
+                              Colors
+                                  .blue
+                                  .shade100,
                               child: Icon(
                                 Icons.receipt,
-                                color: Colors.blue,
+                                color:
+                                Colors.blue,
                               ),
                             ),
                             subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment
+                                  .start,
                               children: [
                                 SizedBox(
                                   height: 10,
@@ -86,7 +102,8 @@ class _DetailpbillState extends State<Detailpbill> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.inventory_2,
+                                      Icons
+                                          .inventory_2,
                                       size: 18,
                                     ),
                                     SizedBox(
@@ -96,7 +113,8 @@ class _DetailpbillState extends State<Detailpbill> {
                                       "${provider.items.length} items | ",
                                     ),
                                     Text(
-                                      provider.paymentMethod,
+                                      provider
+                                          .paymentMethod,
                                     ),
                                   ],
                                 ),
@@ -106,7 +124,8 @@ class _DetailpbillState extends State<Detailpbill> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.calendar_month,
+                                      Icons
+                                          .calendar_month,
                                       size: 18,
                                     ),
                                     SizedBox(
@@ -123,7 +142,8 @@ class _DetailpbillState extends State<Detailpbill> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.access_time,
+                                      Icons
+                                          .access_time,
                                       size: 18,
                                     ),
                                     SizedBox(
@@ -137,17 +157,25 @@ class _DetailpbillState extends State<Detailpbill> {
                               ],
                             ),
                             trailing: Card(
-                              color: Colors.green.shade300,
+                              color: Colors
+                                  .green
+                                  .shade300,
                               child: Padding(
-                                padding: EdgeInsets.symmetric(
+                                padding:
+                                EdgeInsets
+                                    .symmetric(
                                   horizontal: 8,
                                   vertical: 4,
                                 ),
                                 child: Text(
                                   "completed",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                                  style:
+                                  TextStyle(
+                                    color:
+                                    Colors.white,
+                                    fontWeight:
+                                    FontWeight
+                                        .bold,
                                   ),
                                 ),
                               ),
@@ -164,8 +192,10 @@ class _DetailpbillState extends State<Detailpbill> {
                     ),
                     Card(
                       elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
+                      shape:
+                      RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(
                           20,
                         ),
                       ),
@@ -177,21 +207,30 @@ class _DetailpbillState extends State<Detailpbill> {
                           ListTile(
                             title: Text(
                               "Customer Details",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                              style:
+                              TextStyle(
+                                fontWeight:
+                                FontWeight.bold,
                                 fontSize: 18,
                               ),
                             ),
-                            leading: CircleAvatar(
+                            leading:
+                            CircleAvatar(
                               radius: 20,
-                              backgroundColor: Colors.red.shade100,
+                              backgroundColor:
+                              Colors
+                                  .red
+                                  .shade100,
                               child: Icon(
                                 Icons.person,
-                                color: Colors.red,
+                                color:
+                                Colors.red,
                               ),
                             ),
                             subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment
+                                  .start,
                               children: [
                                 SizedBox(
                                   height: 6,
@@ -209,7 +248,8 @@ class _DetailpbillState extends State<Detailpbill> {
                             ),
                             trailing: Icon(
                               Icons.call,
-                              color: Colors.green,
+                              color:
+                              Colors.green,
                             ),
                           ),
                           SizedBox(
@@ -222,15 +262,19 @@ class _DetailpbillState extends State<Detailpbill> {
                       height: 15,
                     ),
                     Card(
-                      color: Colors.blue.shade100,
+                      color:
+                      Colors.blue.shade100,
                       elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
+                      shape:
+                      RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(
                           15,
                         ),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.symmetric(
+                        padding:
+                        EdgeInsets.symmetric(
                           vertical: 12,
                           horizontal: 10,
                         ),
@@ -240,8 +284,11 @@ class _DetailpbillState extends State<Detailpbill> {
                               width: 30,
                               child: Text(
                                 "No",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                style:
+                                TextStyle(
+                                  fontWeight:
+                                  FontWeight
+                                      .bold,
                                 ),
                               ),
                             ),
@@ -249,18 +296,26 @@ class _DetailpbillState extends State<Detailpbill> {
                               flex: 3,
                               child: Text(
                                 "Product",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                style:
+                                TextStyle(
+                                  fontWeight:
+                                  FontWeight
+                                      .bold,
                                 ),
                               ),
                             ),
                             Expanded(
-                              flex: 1,
+                              flex: 2,
                               child: Text(
                                 "Qty",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                textAlign:
+                                TextAlign
+                                    .center,
+                                style:
+                                TextStyle(
+                                  fontWeight:
+                                  FontWeight
+                                      .bold,
                                 ),
                               ),
                             ),
@@ -268,9 +323,14 @@ class _DetailpbillState extends State<Detailpbill> {
                               flex: 2,
                               child: Text(
                                 "Rate",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                textAlign:
+                                TextAlign
+                                    .center,
+                                style:
+                                TextStyle(
+                                  fontWeight:
+                                  FontWeight
+                                      .bold,
                                 ),
                               ),
                             ),
@@ -278,9 +338,13 @@ class _DetailpbillState extends State<Detailpbill> {
                               flex: 2,
                               child: Text(
                                 "Amount",
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                textAlign:
+                                TextAlign.end,
+                                style:
+                                TextStyle(
+                                  fontWeight:
+                                  FontWeight
+                                      .bold,
                                 ),
                               ),
                             ),
@@ -290,27 +354,42 @@ class _DetailpbillState extends State<Detailpbill> {
                     ),
                     Card(
                       elevation: 5,
-                      color: Colors.grey.shade100,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
+                      color:
+                      Colors.grey.shade100,
+                      shape:
+                      RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(
                           15,
                         ),
                       ),
-                      child: ListView.builder(
+                      child:
+                      ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: provider.items.length,
+                        physics:
+                        NeverScrollableScrollPhysics(),
+                        itemCount:
+                        provider
+                            .items
+                            .length,
                         itemBuilder: (
                             context,
                             index,
                             ) {
-                          final item = provider.items[index];
-                          double amount = provider.getAmount(
+                          final item =
+                          provider
+                              .items[index];
+
+                          double amount =
+                          provider
+                              .getAmount(
                             item,
                           );
 
                           return Padding(
-                            padding: EdgeInsets.symmetric(
+                            padding:
+                            EdgeInsets
+                                .symmetric(
                               horizontal: 10,
                               vertical: 8,
                             ),
@@ -327,41 +406,62 @@ class _DetailpbillState extends State<Detailpbill> {
                                     Expanded(
                                       flex: 3,
                                       child: Text(
-                                        item['name'].toString(),
+                                        item['name']
+                                            .toString(),
                                         maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
+                                        overflow:
+                                        TextOverflow
+                                            .ellipsis,
+                                        style:
+                                        TextStyle(
+                                          fontWeight:
+                                          FontWeight
+                                              .w600,
                                         ),
                                       ),
                                     ),
                                     Expanded(
-                                      flex: 1,
+                                      flex: 2,
                                       child: Text(
-                                        item['qty'].toString(),
-                                        textAlign: TextAlign.center,
+                                        provider
+                                            .formatQty(
+                                          item,
+                                        ),
+                                        textAlign:
+                                        TextAlign
+                                            .center,
                                       ),
                                     ),
                                     Expanded(
                                       flex: 2,
                                       child: Text(
                                         "₹${item['price']}",
-                                        textAlign: TextAlign.center,
+                                        textAlign:
+                                        TextAlign
+                                            .center,
                                       ),
                                     ),
                                     Expanded(
                                       flex: 2,
                                       child: Text(
                                         "₹${amount.toStringAsFixed(2)}",
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                        textAlign:
+                                        TextAlign.end,
+                                        style:
+                                        TextStyle(
+                                          fontWeight:
+                                          FontWeight
+                                              .bold,
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                if (index != provider.items.length - 1)
+                                if (index !=
+                                    provider
+                                        .items
+                                        .length -
+                                        1)
                                   Divider(),
                               ],
                             ),
@@ -374,9 +474,12 @@ class _DetailpbillState extends State<Detailpbill> {
                     ),
                     Card(
                       elevation: 5,
-                      color: Colors.blue.shade100,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
+                      color:
+                      Colors.blue.shade100,
+                      shape:
+                      RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius.circular(
                           15,
                         ),
                       ),
@@ -388,8 +491,10 @@ class _DetailpbillState extends State<Detailpbill> {
                             ),
                             trailing: Text(
                               "₹${provider.totalAmount}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                              style:
+                              TextStyle(
+                                fontWeight:
+                                FontWeight.bold,
                                 fontSize: 18,
                               ),
                             ),
@@ -403,8 +508,10 @@ class _DetailpbillState extends State<Detailpbill> {
                             ),
                             trailing: Text(
                               "₹0.00",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                              style:
+                              TextStyle(
+                                fontWeight:
+                                FontWeight.bold,
                                 fontSize: 18,
                               ),
                             ),
@@ -415,17 +522,23 @@ class _DetailpbillState extends State<Detailpbill> {
                           ListTile(
                             title: Text(
                               "Total Amount",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                              style:
+                              TextStyle(
+                                fontWeight:
+                                FontWeight.bold,
                                 fontSize: 18,
                               ),
                             ),
                             trailing: Text(
                               "₹${provider.totalAmount}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                              style:
+                              TextStyle(
+                                fontWeight:
+                                FontWeight.bold,
                                 fontSize: 20,
-                                color: Colors.blue.shade900,
+                                color: Colors
+                                    .blue
+                                    .shade900,
                               ),
                             ),
                           ),
@@ -436,30 +549,42 @@ class _DetailpbillState extends State<Detailpbill> {
                       height: 30,
                     ),
                     SizedBox(
-                      width: double.infinity,
+                      width:
+                      double.infinity,
                       height: 48,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
+                      child:
+                      ElevatedButton.icon(
+                        style: ElevatedButton
+                            .styleFrom(
+                          backgroundColor:
+                          Colors.blue,
+                          foregroundColor:
+                          Colors.white,
+                          shape:
+                          RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius
+                                .circular(
                               12,
                             ),
                           ),
                         ),
-                        onPressed: ()  async {
-                          await provider.printBill();
+                        onPressed:
+                            () async {
+                          await provider
+                              .printBill();
                         },
-
                         icon: Icon(
                           Icons.print,
                         ),
                         label: Text(
                           "Print Bill",
-                          style: TextStyle(
+                          style:
+                          TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontWeight:
+                            FontWeight
+                                .bold,
                           ),
                         ),
                       ),

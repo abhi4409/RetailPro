@@ -280,7 +280,7 @@ class _AddpbillState extends State<Addpbill> {
                   itemBuilder: (context, index) {
                     final item = value.cart[index];
                     double price = double.tryParse(item['price'].toString()) ?? 0;
-                    int qty = int.tryParse(item['qty'].toString()) ?? 0;
+                    double qty = double.tryParse(item['qty'].toString()) ?? 0;
                     double amount = price * qty;
                     return Padding(
                       padding: EdgeInsets.only(top: 5),

@@ -16,6 +16,34 @@ class Hom extends StatefulWidget {
 }
 
 class _HomState extends State<Hom> {
+  String formatQuantity(
+      dynamic quantity,
+      dynamic unit,
+      ) {
+    double qty = double.tryParse(
+      quantity.toString(),
+    ) ??
+        0.0;
+
+    String unitText =
+    unit.toString().toLowerCase().trim();
+
+    if (unitText == "kg") {
+      return qty
+          .toStringAsFixed(2)
+          .replaceAll(
+        RegExp(r'0+$'),
+        '',
+      )
+          .replaceAll(
+        RegExp(r'\.$'),
+        '',
+      );
+    }
+
+    return qty.toInt().toString();
+  }
+
   @override
   Widget build(
       BuildContext context,
@@ -76,9 +104,7 @@ class _HomState extends State<Hom> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (
-                        context,
-                        ) => Prof(),
+                    builder: (context) => Prof(),
                   ),
                 );
               },
@@ -122,12 +148,12 @@ class _HomState extends State<Hom> {
                             height: 25,
                           ),
                           CircleAvatar(
+                            backgroundColor: Colors.blue.shade100,
                             child: Icon(
                               Icons.inventory_2,
                               size: 30,
                               color: Colors.blue,
                             ),
-                            backgroundColor: Colors.blue.shade100,
                           ),
                           SizedBox(
                             height: 8,
@@ -157,12 +183,12 @@ class _HomState extends State<Hom> {
                             height: 25,
                           ),
                           CircleAvatar(
+                            backgroundColor: Colors.green.shade100,
                             child: Icon(
                               Icons.currency_rupee,
                               size: 30,
                               color: Colors.green,
                             ),
-                            backgroundColor: Colors.green.shade100,
                           ),
                           SizedBox(
                             height: 8,
@@ -200,12 +226,12 @@ class _HomState extends State<Hom> {
                             height: 25,
                           ),
                           CircleAvatar(
+                            backgroundColor: Colors.orange.shade100,
                             child: Icon(
                               Icons.shopping_cart,
                               size: 30,
                               color: Colors.orange,
                             ),
-                            backgroundColor: Colors.orange.shade100,
                           ),
                           SizedBox(
                             height: 8,
@@ -235,12 +261,12 @@ class _HomState extends State<Hom> {
                             height: 25,
                           ),
                           CircleAvatar(
+                            backgroundColor: Colors.red.shade100,
                             child: Icon(
                               Icons.trending_up,
                               size: 30,
                               color: Colors.red,
                             ),
-                            backgroundColor: Colors.red.shade100,
                           ),
                           SizedBox(
                             height: 8,
@@ -287,9 +313,7 @@ class _HomState extends State<Hom> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (
-                                    context,
-                                    ) => StaffApproval(),
+                                builder: (context) => StaffApproval(),
                               ),
                             );
                           },
@@ -319,9 +343,7 @@ class _HomState extends State<Hom> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (
-                                    context,
-                                    ) => Addpbill(),
+                                builder: (context) => Addpbill(),
                               ),
                             );
                           },
@@ -351,9 +373,7 @@ class _HomState extends State<Hom> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (
-                                    context,
-                                    ) => Purch(),
+                                builder: (context) => Purch(),
                               ),
                             );
                           },
@@ -420,13 +440,35 @@ class _HomState extends State<Hom> {
                                 )
                                     : ListView.builder(
                                   shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: provider.lowStockProducts.length,
+                                  physics:
+                                  NeverScrollableScrollPhysics(),
+                                  itemCount: provider
+                                      .lowStockProducts.length,
                                   itemBuilder: (
                                       context,
                                       index,
                                       ) {
-                                    var data = provider.lowStockProducts[index];
+                                    var data =
+                                    provider.lowStockProducts[
+                                    index];
+
+                                    String quantity =
+                                    formatQuantity(
+                                      data['pquantity'],
+                                      data['punits'],
+                                    );
+
+                                    String minStock =
+                                    formatQuantity(
+                                      data['pminstock'],
+                                      data['punits'],
+                                    );
+
+                                    String unit =
+                                        data['punits']
+                                            ?.toString() ??
+                                            "";
+
                                     return ListTile(
                                       leading: Icon(
                                         Icons.warning_amber,
@@ -435,11 +477,12 @@ class _HomState extends State<Hom> {
                                       title: Text(
                                         data['pname'].toString(),
                                         style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight:
+                                          FontWeight.bold,
                                         ),
                                       ),
                                       subtitle: Text(
-                                        "Stock: ${data['pquantity']}  |  Min Stock: ${data['pminstock']}",
+                                        "Stock: $quantity $unit  |  Min Stock: $minStock $unit",
                                       ),
                                     );
                                   },

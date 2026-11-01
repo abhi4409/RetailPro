@@ -5,7 +5,7 @@ import '../../Viewmodels/purchasedetail_viewmodel.dart';
 class PurchaseDetail extends StatefulWidget {
   final Map<String, dynamic> data;
 
-  const PurchaseDetail({
+  PurchaseDetail({
     super.key,
     required this.data,
   });
@@ -29,16 +29,16 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
             appBar: AppBar(
               backgroundColor: Colors.blue,
               foregroundColor: Colors.white,
-              title: const Text("Purchase Details"),
+              title: Text("Purchase Details"),
             ),
             body: SingleChildScrollView(
-              padding: const EdgeInsets.all(15),
+              padding: EdgeInsets.all(15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(15),
+                    padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade50,
                       borderRadius: BorderRadius.circular(15),
@@ -46,70 +46,70 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "Supplier Information",
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 15),
+                        SizedBox(height: 15),
                         Text("Supplier Name: ${data['suppliername'] ?? ''}"),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                         Text("Mobile Number: ${data['suppliermobile'] ?? ''}"),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                         Text("Bill Number: ${data['billno'] ?? ''}"),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                         Text("Purchase Date: $date"),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
+                  SizedBox(height: 20),
+                  Text(
                     "Purchased Products",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       final item = items[index];
 
                       return Card(
-                        margin: const EdgeInsets.only(bottom: 12),
+                        margin: EdgeInsets.only(bottom: 12),
                         color: Colors.green.shade100,
                         child: Padding(
-                          padding: const EdgeInsets.all(15),
+                          padding: EdgeInsets.all(15),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "${index + 1}. ${item['productname'] ?? ''}",
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const Divider(),
+                              Divider(),
                               Text("Category: ${item['category'] ?? ''}"),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8),
                               Text("Barcode: ${item['barcode'] ?? ''}"),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8),
                               Text("Unit: ${item['unit'] ?? ''}"),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8),
                               Text("Quantity: ${item['quantity'] ?? ''}"),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8),
                               Text("Purchase Price: ₹${item['purchaseprice'] ?? ''}"),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8),
                               Text("Selling Price: ₹${item['sellingprice'] ?? ''}"),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8),
                               Text("MRP: ₹${item['mrp'] ?? ''}"),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8),
                               Text("Minimum Stock: ${item['minstock'] ?? ''}"),
                             ],
                           ),
@@ -117,10 +117,10 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                       );
                     },
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(15),
+                    padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
                       color: Colors.cyan.shade100,
                       borderRadius: BorderRadius.circular(15),
@@ -128,19 +128,19 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "Purchase Summary",
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 15),
+                        SizedBox(height: 15),
                         Text("Total Products: ${items.length}"),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                         Text(
                           "Total Amount: ₹${data['total'] ?? 0}",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.green,
@@ -149,10 +149,10 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.all(15),
+                    padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
                       color: Colors.orange.shade50,
                       borderRadius: BorderRadius.circular(15),
@@ -160,14 +160,14 @@ class _PurchaseDetailState extends State<PurchaseDetail> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "Notes",
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                         Text("${data['notes'] ?? 'No notes'}"),
                       ],
                     ),

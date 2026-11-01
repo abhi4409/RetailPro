@@ -234,12 +234,11 @@ class _BillState extends State<Bill> {
                           double price = provider.getPrice(
                             item,
                           );
-                          int qty = provider.getQty(
+                          String qty = provider.formatQty(
                             item,
                           );
                           double amount = provider.getAmount(
-                            item,
-                          );
+                            item,);
 
                           return Column(
                             children: [

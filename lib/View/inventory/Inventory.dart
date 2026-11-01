@@ -15,6 +15,34 @@ class Inven extends StatefulWidget {
 }
 
 class _InvenState extends State<Inven> {
+  String formatQuantity(
+      dynamic quantity,
+      dynamic unit,
+      ) {
+    double qty = double.tryParse(
+      quantity.toString(),
+    ) ??
+        0.0;
+
+    String unitText =
+    unit.toString().toLowerCase().trim();
+
+    if (unitText == "kg") {
+      return qty
+          .toStringAsFixed(2)
+          .replaceAll(
+        RegExp(r'0+$'),
+        '',
+      )
+          .replaceAll(
+        RegExp(r'\.$'),
+        '',
+      );
+    }
+
+    return qty.toInt().toString();
+  }
+
   @override
   Widget build(
       BuildContext context,
@@ -67,14 +95,16 @@ class _InvenState extends State<Inven> {
                 horizontal: 20,
               ),
               child: TextField(
-                onChanged: (value) => provider.searchProduct(
-                  value,
-                ),
+                onChanged: (value) {
+                  provider.searchProduct(
+                    value,
+                  );
+                },
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.search,
                   ),
-                  hintText: "search product name ",
+                  hintText: "search product name",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(
                       20,
@@ -115,7 +145,7 @@ class _InvenState extends State<Inven> {
                             ),
                           ),
                           Text(
-                            "Total products ",
+                            "Total products",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -318,8 +348,12 @@ class _InvenState extends State<Inven> {
                                       ),
                                       Flexible(
                                         child: Text(
-                                          snap['pquantity'].toString(),
-                                          overflow: TextOverflow.ellipsis,
+                                          formatQuantity(
+                                            snap['pquantity'],
+                                            snap['punits'],
+                                          ),
+                                          overflow:
+                                          TextOverflow.ellipsis,
                                         ),
                                       ),
                                     ],
@@ -333,8 +367,10 @@ class _InvenState extends State<Inven> {
                                     children: [
                                       Flexible(
                                         child: Text(
-                                          snap['pselling price'].toString(),
-                                          overflow: TextOverflow.ellipsis,
+                                          snap['pselling price']
+                                              .toString(),
+                                          overflow:
+                                          TextOverflow.ellipsis,
                                         ),
                                       ),
                                       Text(
@@ -343,7 +379,8 @@ class _InvenState extends State<Inven> {
                                       Flexible(
                                         child: Text(
                                           snap['punits'].toString(),
-                                          overflow: TextOverflow.ellipsis,
+                                          overflow:
+                                          TextOverflow.ellipsis,
                                         ),
                                       ),
                                     ],
@@ -363,21 +400,36 @@ class _InvenState extends State<Inven> {
                                         context,
                                         "edit",
                                         arguments: {
-                                          "PNAME": snap["pname"],
-                                          "PCATEGORY": snap["pcatogory"],
-                                          "PUNIT": snap["punits"],
-                                          "PBARCODE": snap["pbarcode"],
+                                          "PNAME":
+                                          snap["pname"],
+                                          "PCATEGORY":
+                                          snap["pcatogory"],
+                                          "PUNIT":
+                                          snap["punits"],
+                                          "PBARCODE":
+                                          snap["pbarcode"],
                                           "PPURCHASEPRICE":
                                           snap["Ppurchaseprice"],
                                           "PSELLINGPRICE":
                                           snap["pselling price"],
-                                          "PQUANTITY": snap["pquantity"],
-                                          "PMINSTOCK": snap["pminstock"],
+                                          "PQUANTITY":
+                                          snap["pquantity"],
+                                          "PMINSTOCK":
+                                          snap["pminstock"],
                                           "PSUPPLIERNAME":
                                           snap["psuppername"],
-                                          "PDATE": snap["pdate"],
-                                          "PINVOICE": snap["pinvoice"],
-                                          "docid": snap.id,
+                                          "PDATE":
+                                          snap["pdate"],
+                                          "PINVOICE":
+                                          snap["pinvoice"],
+                                          "PIMAGE":
+                                          snap.data().containsKey(
+                                            "pimage",
+                                          )
+                                              ? snap["pimage"]
+                                              : "",
+                                          "docid":
+                                          snap.id,
                                         },
                                       );
                                     },
@@ -396,7 +448,11 @@ class _InvenState extends State<Inven> {
                                       await provider.deleteProduct(
                                         snap.id,
                                       );
-                                      if (!context.mounted) return;
+
+                                      if (!context.mounted) {
+                                        return;
+                                      }
+
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(
@@ -404,7 +460,8 @@ class _InvenState extends State<Inven> {
                                           content: Text(
                                             "Product deleted",
                                           ),
-                                          backgroundColor: Colors.green,
+                                          backgroundColor:
+                                          Colors.green,
                                         ),
                                       );
                                     },

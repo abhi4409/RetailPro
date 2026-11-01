@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 class PaymentServices {
   final CollectionReference<Map<String, dynamic>> sales =
   FirebaseFirestore.instance.collection('sales');
@@ -52,19 +53,15 @@ class PaymentServices {
         continue;
       }
 
-      int currentQty =
-          int.tryParse(
-            data['pquantity']?.toString() ?? "0",
-          ) ??
-              0;
+      double currentQty = double.tryParse(
+        data['pquantity'].toString(),
+      ) ?? 0;
 
-      int soldQty =
-          int.tryParse(
-            item['qty']?.toString() ?? "0",
-          ) ??
-              0;
+      double soldQty = double.tryParse(
+        item['qty'].toString(),
+      ) ?? 0;
 
-      int newQty = currentQty - soldQty;
+      double newQty = currentQty - soldQty;
 
       if (newQty < 0) {
         newQty = 0;

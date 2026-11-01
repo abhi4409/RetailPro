@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -19,35 +20,42 @@ class AddtobillViewmodel extends ChangeNotifier {
 
   List<QueryDocumentSnapshot> allProducts = [];
   List<QueryDocumentSnapshot> filteredProducts = [];
-
   List<Map<String, dynamic>> cart = [];
+
+  StreamSubscription? productSubscription;
 
   AddtobillViewmodel() {
     getProducts();
   }
 
-  // GET PRODUCTS
-  Future<void> getProducts() async {
-    try {
-      loading = true;
-      notifyListeners();
+  void getProducts() {
+    loading = true;
+    notifyListeners();
 
-      var snapshot = await products.get();
+    productSubscription = products.snapshots().listen(
+          (snapshot) {
+        allProducts = snapshot.docs;
 
-      allProducts = snapshot.docs;
-      filteredProducts = snapshot.docs;
-    } catch (e) {
-      print(e);
-    } finally {
-      loading = false;
-      notifyListeners();
-    }
+        filterProducts();
+
+        loading = false;
+
+        notifyListeners();
+      },
+      onError: (error) {
+        loading = false;
+        notifyListeners();
+      },
+    );
   }
 
-  // SEARCH PRODUCT
   void searchProduct(String value) {
     searchText = value;
+    filterProducts();
+    notifyListeners();
+  }
 
+  void filterProducts() {
     filteredProducts = allProducts.where(
           (doc) {
         String productName =
@@ -58,18 +66,17 @@ class AddtobillViewmodel extends ChangeNotifier {
         );
       },
     ).toList();
-
-    notifyListeners();
   }
 
-  // CHANGE CUSTOMER
   void changeCustomer(String value) {
     selectedcustomer = value;
-
     notifyListeners();
   }
 
-  // ADD PRODUCT TO CART
+  bool isKg(String unit) {
+    return unit.toLowerCase().trim() == "kg";
+  }
+
   void addtocart(
       String id,
       String name,
@@ -82,87 +89,136 @@ class AddtobillViewmodel extends ChangeNotifier {
     );
 
     if (index != -1) {
-      int qty =
-          int.tryParse(
+      double qty =
+          double.tryParse(
             cart[index]['qty'].toString(),
           ) ??
-              0;
+              0.0;
 
-      cart[index]['qty'] = qty + 1;
+      if (isKg(unit)) {
+        qty = qty + 0.1;
+      } else {
+        qty = qty + 1;
+      }
+
+      cart[index]['qty'] =
+          double.parse(
+            qty.toStringAsFixed(2),
+          );
     } else {
-      cart.add(
-        {
-          'id': id,
-          'name': name,
-          'price': price,
-          'unit': unit,
-          'qty': 1,
-          'mrp': mrp,
-        },
-      );
+      cart.add({
+        'id': id,
+        'name': name,
+        'price': price,
+        'unit': unit,
+        'qty': isKg(unit) ? 0.1 : 1,
+        'mrp': mrp,
+      });
     }
 
     notifyListeners();
   }
 
-  // INCREASE QUANTITY
   void increseqty(int index) {
-    int qty =
-        int.tryParse(
+    double qty =
+        double.tryParse(
           cart[index]['qty'].toString(),
         ) ??
-            0;
+            0.0;
 
-    cart[index]['qty'] = qty + 1;
+    String unit =
+    cart[index]['unit'].toString();
 
-    notifyListeners();
-  }
-
-  // DECREASE QUANTITY
-  void decreseqty(int index) {
-    int qty =
-        int.tryParse(
-          cart[index]['qty'].toString(),
-        ) ??
-            0;
-
-    if (qty > 1) {
-      cart[index]['qty'] = qty - 1;
+    if (isKg(unit)) {
+      qty = qty + 0.1;
+    } else {
+      qty = qty + 1;
     }
 
+    cart[index]['qty'] =
+        double.parse(
+          qty.toStringAsFixed(2),
+        );
+
     notifyListeners();
   }
 
-  // DELETE ONE ITEM
+  void decreseqty(int index) {
+    double qty =
+        double.tryParse(
+          cart[index]['qty'].toString(),
+        ) ??
+            0.0;
+
+    String unit =
+    cart[index]['unit'].toString();
+
+    if (isKg(unit)) {
+      if (qty > 0.1) {
+        qty = qty - 0.1;
+      }
+    } else {
+      if (qty > 1) {
+        qty = qty - 1;
+      }
+    }
+
+    cart[index]['qty'] =
+        double.parse(
+          qty.toStringAsFixed(2),
+        );
+
+    notifyListeners();
+  }
+
+  void changeKgQty(
+      int index,
+      double qty,
+      ) {
+    String unit =
+    cart[index]['unit'].toString();
+
+    if (!isKg(unit)) {
+      return;
+    }
+
+    if (qty <= 0) {
+      return;
+    }
+
+    cart[index]['qty'] =
+        double.parse(
+          qty.toStringAsFixed(2),
+        );
+
+    notifyListeners();
+  }
+
   void itemdelete(int index) {
     cart.removeAt(index);
-
     notifyListeners();
   }
 
-  // CLEAR CART
   void clearcart() {
     cart.clear();
-
     notifyListeners();
   }
 
-  // TOTAL AMOUNT
   double get totalAmount {
-    double total = 0;
+    double total = 0.0;
 
     for (var item in cart) {
       double price =
           double.tryParse(
             item['price'].toString(),
           ) ??
-              0;
+              0.0;
 
-      int qty =
-          int.tryParse(
+      double qty =
+          double.tryParse(
             item['qty'].toString(),
           ) ??
-              0;
+              0.0;
 
       total = total + (price * qty);
     }
@@ -170,7 +226,6 @@ class AddtobillViewmodel extends ChangeNotifier {
     return total;
   }
 
-  // GET BILL NUMBER
   Future<String> getBillNumber() async {
     var reference =
     billCounter.doc('bill');
@@ -194,23 +249,18 @@ class AddtobillViewmodel extends ChangeNotifier {
 
       number = lastNumber + 1;
 
-      await reference.update(
-        {
-          'lastNumber': number,
-        },
-      );
+      await reference.update({
+        'lastNumber': number,
+      });
     } else {
-      await reference.set(
-        {
-          'lastNumber': number,
-        },
-      );
+      await reference.set({
+        'lastNumber': number,
+      });
     }
 
     return "RP-$number";
   }
 
-  // GENERATE BILL
   Future<String?> generateBill() async {
     if (cart.isEmpty) {
       return null;
@@ -235,11 +285,10 @@ class AddtobillViewmodel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
   void newBill() {
     cart.clear();
-
     cusname.clear();
-
     cusnum.clear();
 
     searchText = "";
@@ -247,16 +296,15 @@ class AddtobillViewmodel extends ChangeNotifier {
     selectedcustomer =
     "walk in customer";
 
-    filteredProducts =
-        List.from(
-          allProducts,
-        );
+    filterProducts();
 
     notifyListeners();
   }
 
   @override
   void dispose() {
+    productSubscription?.cancel();
+
     cusname.dispose();
     cusnum.dispose();
 

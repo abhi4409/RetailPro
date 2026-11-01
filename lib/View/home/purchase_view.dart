@@ -132,6 +132,7 @@ class _AddpurdetailState extends State<Addpurdetail> {
                                 height: 5,
                               ),
                               TextField(
+                                maxLength: 10,
                                 controller: provider.suppliermob,
                                 keyboardType: TextInputType.phone,
                                 decoration: InputDecoration(
