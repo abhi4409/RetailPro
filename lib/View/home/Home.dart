@@ -201,7 +201,7 @@ class _HomState extends State<Hom> {
                             ),
                           ),
                           Text(
-                            "Todays Sales",
+                            "Monthly Sales",
                           ),
                         ],
                       ),
@@ -244,7 +244,7 @@ class _HomState extends State<Hom> {
                             ),
                           ),
                           Text(
-                            "Purchases",
+                            "Monthly Purchase",
                           ),
                         ],
                       ),
@@ -279,7 +279,7 @@ class _HomState extends State<Hom> {
                             ),
                           ),
                           Text(
-                            "Profit",
+                            "Monthly Profit",
                           ),
                         ],
                       ),

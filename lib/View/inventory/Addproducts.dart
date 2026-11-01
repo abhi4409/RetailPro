@@ -557,14 +557,7 @@ class _AddpState extends State<Addp> {
                             backgroundColor: Colors.green,
                           ),
                         );
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (
-                                context,
-                                ) => Bottomna(),
-                          ),
-                        );
+                        Navigator.pop(context);
                       }
                     } catch (e) {
                       if (!context.mounted) {
