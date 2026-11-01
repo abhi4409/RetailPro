@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../Viewmodels/addpro_viewmodel.dart';
-import '../home/Bottonnavi.dart';
 
 class Addp extends StatefulWidget {
   Addp({
