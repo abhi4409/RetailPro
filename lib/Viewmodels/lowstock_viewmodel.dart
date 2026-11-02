@@ -22,24 +22,41 @@ class LowstockViewmodel extends ChangeNotifier {
   String get error => _lowstockModels.error;
 
   void getLowStockProducts() {
+    _lowstockModels.loading = true;
+    _lowstockModels.error = "";
+
     productSubscription = _repository.getProducts().listen(
           (snapshot) {
-        _lowstockModels.lowStockProducts = snapshot.docs.where((product) {
-          var data = product.data();
-          int quantity =
-              int.tryParse(data['pquantity']?.toString() ?? '0') ?? 0;
-          int minstock =
-              int.tryParse(data['pminstock']?.toString() ?? '0') ?? 0;
-          return quantity <= minstock;
-        }).toList();
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> lowItems = [];
 
+        for (var product in snapshot.docs) {
+          var data = product.data();
+
+          double quantity = double.tryParse(
+            data['pquantity']?.toString() ?? '0',
+          ) ??
+              0.0;
+
+          double minStock = double.tryParse(
+            data['pminstock']?.toString() ?? '0',
+          ) ??
+              0.0;
+
+          if (quantity > 0 && quantity <= minStock) {
+            lowItems.add(product);
+          }
+        }
+
+        _lowstockModels.lowStockProducts = lowItems;
         _lowstockModels.loading = false;
         _lowstockModels.error = "";
+
         notifyListeners();
       },
       onError: (e) {
         _lowstockModels.loading = false;
         _lowstockModels.error = e.toString();
+
         notifyListeners();
       },
     );
