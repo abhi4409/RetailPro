@@ -3,43 +3,16 @@ import 'package:provider/provider.dart';
 import '../../Viewmodels/lowstock_viewmodel.dart';
 
 class Lowsto extends StatefulWidget {
-  Lowsto({
+  const Lowsto({
     super.key,
   });
 
   @override
-  State<Lowsto> createState() => _LowstoState();
+  State<Lowsto> createState() =>
+      _LowstoState();
 }
 
 class _LowstoState extends State<Lowsto> {
-  String formatQuantity(
-      dynamic quantity,
-      dynamic unit,
-      ) {
-    double qty = double.tryParse(
-      quantity.toString(),
-    ) ??
-        0.0;
-
-    String unitText =
-    unit.toString().toLowerCase().trim();
-
-    if (unitText == "kg") {
-      return qty
-          .toStringAsFixed(2)
-          .replaceAll(
-        RegExp(r'0+$'),
-        '',
-      )
-          .replaceAll(
-        RegExp(r'\.$'),
-        '',
-      );
-    }
-
-    return qty.toInt().toString();
-  }
-
   @override
   Widget build(
       BuildContext context,
@@ -53,12 +26,12 @@ class _LowstoState extends State<Lowsto> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           "Low Stock items",
         ),
       ),
       body: provider.loading
-          ? Center(
+          ? const Center(
         child:
         CircularProgressIndicator(),
       )
@@ -71,7 +44,7 @@ class _LowstoState extends State<Lowsto> {
           : provider
           .lowStockProducts
           .isEmpty
-          ? Center(
+          ? const Center(
         child: Text(
           "No low stock items",
           style: TextStyle(
@@ -83,7 +56,8 @@ class _LowstoState extends State<Lowsto> {
       )
           : ListView.builder(
         padding:
-        EdgeInsets.all(
+        const EdgeInsets
+            .all(
           20,
         ),
         itemCount: provider
@@ -104,7 +78,8 @@ class _LowstoState extends State<Lowsto> {
                   "";
 
           String quantity =
-          formatQuantity(
+          provider
+              .formatQuantity(
             product[
             'pquantity'],
             unit,
@@ -113,14 +88,16 @@ class _LowstoState extends State<Lowsto> {
           return Card(
             elevation: 5,
             margin:
-            EdgeInsets.only(
+            const EdgeInsets
+                .only(
               bottom: 12,
             ),
             child: Container(
-              width: double
-                  .infinity,
+              width:
+              double.infinity,
               padding:
-              EdgeInsets.all(
+              const EdgeInsets
+                  .all(
                 15,
               ),
               decoration:
@@ -133,14 +110,14 @@ class _LowstoState extends State<Lowsto> {
               ),
               child: Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons
                         .inventory_2,
                     size: 35,
                     color:
                     Colors.red,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 15,
                   ),
                   Expanded(
@@ -150,51 +127,46 @@ class _LowstoState extends State<Lowsto> {
                           .start,
                       children: [
                         Text(
-                          product[
-                          'pname']
-                              .toString(),
-                          maxLines:
-                          2,
+                          product['pname']
+                              ?.toString() ??
+                              "",
+                          maxLines: 2,
                           overflow:
                           TextOverflow
                               .ellipsis,
                           style:
-                          TextStyle(
-                            fontSize:
-                            16,
+                          const TextStyle(
+                            fontSize: 16,
                             fontWeight:
                             FontWeight
                                 .bold,
                           ),
                         ),
-                        SizedBox(
-                          height:
-                          5,
+                        const SizedBox(
+                          height: 5,
                         ),
                         Text(
-                          product[
-                          'pcatogory']
-                              .toString(),
+                          product['pcatogory']
+                              ?.toString() ??
+                              "",
                           style:
-                          TextStyle(
-                            color:
-                            Colors.grey,
+                          const TextStyle(
+                            color: Colors
+                                .grey,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Container(
                     padding:
-                    EdgeInsets
+                    const EdgeInsets
                         .symmetric(
-                      horizontal:
-                      10,
-                      vertical:
-                      8,
+                      horizontal: 10,
+                      vertical: 8,
                     ),
                     decoration:
                     BoxDecoration(
@@ -210,9 +182,8 @@ class _LowstoState extends State<Lowsto> {
                     child: Text(
                       "Only $quantity $unit Left",
                       style:
-                      TextStyle(
-                        fontSize:
-                        13,
+                      const TextStyle(
+                        fontSize: 13,
                         color:
                         Colors.red,
                         fontWeight:

@@ -10,6 +10,8 @@ class LowstockViewmodel extends ChangeNotifier {
 
   StreamSubscription? productSubscription;
 
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> _outOfStockProducts = [];
+
   LowstockViewmodel() {
     getLowStockProducts();
   }
@@ -17,49 +19,164 @@ class LowstockViewmodel extends ChangeNotifier {
   List<QueryDocumentSnapshot<Map<String, dynamic>>> get lowStockProducts =>
       _lowstockModels.lowStockProducts;
 
+  List<QueryDocumentSnapshot<Map<String, dynamic>>> get outOfStockProducts =>
+      _outOfStockProducts;
+
   bool get loading => _lowstockModels.loading;
 
   String get error => _lowstockModels.error;
+
+  int get lowStockCount => lowStockProducts.length;
+
+  int get outOfStockCount => outOfStockProducts.length;
+
+  double getNumber(dynamic value) {
+    if (value == null) {
+      return 0.0;
+    }
+
+    if (value is num) {
+      return value.toDouble();
+    }
+
+    return double.tryParse(
+      value.toString().trim(),
+    ) ??
+        0.0;
+  }
+
+  bool isOutOfStock(
+      Map<String, dynamic> data,
+      ) {
+    double quantity = getNumber(
+      data['pquantity'],
+    );
+
+    return quantity <= 0;
+  }
+
+  bool isLowStock(
+      Map<String, dynamic> data,
+      ) {
+    double quantity = getNumber(
+      data['pquantity'],
+    );
+
+    double minStock = getNumber(
+      data['pminstock'],
+    );
+
+    return quantity > 0 &&
+        quantity <= minStock;
+  }
+
+  bool isInStock(
+      Map<String, dynamic> data,
+      ) {
+    double quantity = getNumber(
+      data['pquantity'],
+    );
+
+    double minStock = getNumber(
+      data['pminstock'],
+    );
+
+    return quantity > minStock;
+  }
+
+  String formatQuantity(
+      dynamic quantity,
+      dynamic unit,
+      ) {
+    double qty = getNumber(quantity);
+
+    String unitText =
+        unit?.toString().trim().toLowerCase() ?? "";
+
+    if (qty == qty.roundToDouble()) {
+      return qty.toInt().toString();
+    }
+
+    if (unitText == "kg" ||
+        unitText == "kgs" ||
+        unitText == "kilogram" ||
+        unitText == "kilograms") {
+      return qty
+          .toStringAsFixed(2)
+          .replaceAll(
+        RegExp(r'0+$'),
+        '',
+      )
+          .replaceAll(
+        RegExp(r'\.$'),
+        '',
+      );
+    }
+
+    return qty
+        .toStringAsFixed(2)
+        .replaceAll(
+      RegExp(r'0+$'),
+      '',
+    )
+        .replaceAll(
+      RegExp(r'\.$'),
+      '',
+    );
+  }
 
   void getLowStockProducts() {
     _lowstockModels.loading = true;
     _lowstockModels.error = "";
 
-    productSubscription = _repository.getProducts().listen(
-          (snapshot) {
-        List<QueryDocumentSnapshot<Map<String, dynamic>>> lowItems = [];
+    productSubscription?.cancel();
 
-        for (var product in snapshot.docs) {
-          var data = product.data();
+    productSubscription =
+        _repository.getProducts().listen(
+              (snapshot) {
+            List<QueryDocumentSnapshot<Map<String, dynamic>>>
+            lowItems = [];
 
-          double quantity = double.tryParse(
-            data['pquantity']?.toString() ?? '0',
-          ) ??
-              0.0;
+            List<QueryDocumentSnapshot<Map<String, dynamic>>>
+            outItems = [];
 
-          double minStock = double.tryParse(
-            data['pminstock']?.toString() ?? '0',
-          ) ??
-              0.0;
+            for (var product in snapshot.docs) {
+              Map<String, dynamic> data =
+              product.data();
 
-          if (quantity > 0 && quantity <= minStock) {
-            lowItems.add(product);
-          }
-        }
+              double quantity = getNumber(
+                data['pquantity'],
+              );
 
-        _lowstockModels.lowStockProducts = lowItems;
-        _lowstockModels.loading = false;
-        _lowstockModels.error = "";
+              double minStock = getNumber(
+                data['pminstock'],
+              );
 
-        notifyListeners();
-      },
-      onError: (e) {
-        _lowstockModels.loading = false;
-        _lowstockModels.error = e.toString();
+              if (quantity <= 0) {
+                outItems.add(product);
+              } else if (quantity <= minStock) {
+                lowItems.add(product);
+              }
+            }
 
-        notifyListeners();
-      },
-    );
+            _lowstockModels.lowStockProducts =
+                lowItems;
+
+            _outOfStockProducts = outItems;
+
+            _lowstockModels.loading = false;
+            _lowstockModels.error = "";
+
+            notifyListeners();
+          },
+          onError: (e) {
+            _lowstockModels.loading = false;
+            _lowstockModels.error =
+                e.toString();
+
+            notifyListeners();
+          },
+        );
   }
 
   @override

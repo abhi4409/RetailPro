@@ -32,12 +32,31 @@ class InventoryViewmodel extends ChangeNotifier {
     productSubscription = _repository.getProducts().listen(
           (snapshot) {
         _inventoryModels.docs = snapshot.docs;
+
         calculateStock();
+
         filterProducts();
+
         _inventoryModels.loading = false;
+
         notifyListeners();
       },
     );
+  }
+
+  double getNumber(dynamic value) {
+    if (value == null) {
+      return 0.0;
+    }
+
+    if (value is num) {
+      return value.toDouble();
+    }
+
+    return double.tryParse(
+      value.toString().trim(),
+    ) ??
+        0.0;
   }
 
   void calculateStock() {
@@ -46,12 +65,19 @@ class InventoryViewmodel extends ChangeNotifier {
 
     for (var product in _inventoryModels.docs) {
       var data = product.data();
-      int quantity = int.tryParse(data['pquantity']?.toString() ?? '0') ?? 0;
-      int minStock = int.tryParse(data['pminstock']?.toString() ?? '0') ?? 0;
+
+      double quantity = getNumber(
+        data['pquantity'],
+      );
+
+      double minStock = getNumber(
+        data['pminstock'],
+      );
 
       if (quantity > minStock) {
         _inventoryModels.inStock++;
-      } else {
+      } else if (quantity > 0 &&
+          quantity <= minStock) {
         _inventoryModels.lowStock++;
       }
     }
@@ -59,7 +85,9 @@ class InventoryViewmodel extends ChangeNotifier {
 
   void searchProduct(String value) {
     _inventoryModels.searchText = value;
+
     filterProducts();
+
     notifyListeners();
   }
 
@@ -67,8 +95,13 @@ class InventoryViewmodel extends ChangeNotifier {
     _inventoryModels.filteredDocs = _inventoryModels.docs.where(
           (doc) {
         var data = doc.data();
-        String productName = data['pname']?.toString().toLowerCase() ?? "";
-        return productName.contains(_inventoryModels.searchText.toLowerCase());
+
+        String productName =
+            data['pname']?.toString().toLowerCase() ?? "";
+
+        return productName.contains(
+          _inventoryModels.searchText.toLowerCase(),
+        );
       },
     ).toList();
   }
